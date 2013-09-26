@@ -43,11 +43,13 @@ module Lob
     error_message = nil
     raise e unless e.respond_to? :http_body
     begin
+      exception_is_message = false
       json = JSON(e.http_body)
 
       if json.has_key? 'errors'
         error_message = json["errors"].first.values.first
       elsif json.has_key? 'message'
+        exception_is_message = true
         error_message = json["message"]
       else
         error_message = "Unknown error: #{json}"
@@ -55,7 +57,12 @@ module Lob
     rescue => e
       raise e
     end
-    raise Lob::Error.new(error_message)
+
+    if exception_is_message
+      return json
+    else
+      raise Lob::Error.new(error_message)
+    end
   end
 
 end

@@ -23,6 +23,11 @@ module Lob
         Lob.submit :post, address_url, @resource.format_address_params(options)
       end
 
+      def update(address_id, options={})
+        params = @resource.format_address_params(options, false)
+        Lob.submit(:post, address_url(address_id), params)
+      end
+
       def destroy(address_id)
         Lob.submit :delete, address_url(address_id)
       end

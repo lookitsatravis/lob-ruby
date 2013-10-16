@@ -119,11 +119,12 @@ end
 ```ruby
 # name, to-address and object are the arguments
 # to-address can be specified as an address-id
-@lob.jobs.create("New Cool Posters", "to-address-id", "object-id")
+@lob.jobs.create("New Cool Posters", "from-address-id", "to-address-id", "object-id")
 
 # to-address can also be specified as address params to create new address
 @lob.jobs.create(
   "New Cool Posters",
+  {name: "FromAddress", address_line1: "120, 6th Ave", city: "Boston", country: "USA", zip: 12345},
   {name: "ToAddress", address_line1: "120, 6th Ave", city: "Boston", country: "USA", zip: 12345},
   "object-id"
 )
@@ -132,6 +133,7 @@ end
 # and other options like packaging_id an setting_id
 @lob.jobs.create(
   "New Cool Posters",
+  "from-address-id",
   "to-address-id",
   "object-id",
   {
@@ -140,6 +142,16 @@ end
     setting_id: "some-setting-id"
   }
 )
+
+# Or add a job with multiple objects
+
+@lob.jobs.create(
+  "New Cool Posters",
+  "from-address-id",
+  {name: "ToAddress", address_line1: "120, 6th Ave", city: "Boston", country: "USA", zip: 12345},
+  ["object-id", "another-object-id"]
+)
+
 ```
 
 #### List jobs
@@ -263,13 +275,63 @@ You'll have to specify either the `message` option or the `back` option.
 @lob.services.list
 ```
 
-### Settings
+### Bank accounts
 
-#### List settings
+#### List bank accounts
 
 ```ruby
-# returns a list of settings
-@lob.settings.list
+# returns a list of accounts
+@lob.bank_accounts.list
+```
+
+#### Add a bank account
+
+```ruby
+bank_address = {name: "ToAddress", address_line1: "120, 6th Ave", city: "Boston", country: "USA", zip: 12345}
+account_address = {name: "ToAddress", address_line1: "120, 6th Ave", city: "Boston", country: "USA", zip: 12345}
+
+# Pass address params or address IDs
+# The 5th argument is the options argument and is optional
+@lob.bank_accounts.create("routing_number", bank_address, "account_number", account_address)
+```
+
+#### Find a bank account
+
+```ruby
+@lob.bank_accounts.find "bank-account-id"
+```
+
+### Checks
+
+#### Create a check
+
+```ruby
+# Transfer $5000 to a bank account.
+@lob.checks.create("bank-account-id", "to-address-ID", 5000)
+
+# For the "to" address, you can pass params or an address ID
+# You can also specify an optional 4th argument, with other options.
+```
+
+#### List checks
+
+```ruby
+@lob.checks.list
+```
+
+#### Find a check
+
+```ruby
+@lob.checks.find("check-id")
+```
+
+### Supported countries
+
+#### List supported countries
+
+```ruby
+# returns a list of countries
+@lob.countries.list
 ```
 
 ## Developing

@@ -10,7 +10,9 @@ require "lob/v1/packaging"
 require "lob/v1/postcard"
 require "lob/v1/service"
 require "lob/v1/setting"
-
+require "lob/v1/country"
+require "lob/v1/check"
+require "lob/v1/bank_account"
 
 module Lob
 

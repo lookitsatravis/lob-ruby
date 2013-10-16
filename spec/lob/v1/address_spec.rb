@@ -64,7 +64,7 @@ describe Lob::V1::Address do
         new_address = subject.addresses.create sample_params
 
         list_result = subject.addresses.list
-        assert /#{new_address["name"]}/ =~ list_result.to_s
+        assert /#{new_address["name"]}/i =~ list_result.to_s
       end
     end
   end
@@ -74,7 +74,7 @@ describe Lob::V1::Address do
     it "should create an address" do
       VCR.use_cassette('create_address') do
         result = subject.addresses.create sample_params
-        result["name"].downcase.must_equal(sample_params[:name].downcase)
+        assert /#{result["name"]}/i =~ sample_params[:name]
       end
     end
   end
@@ -86,7 +86,7 @@ describe Lob::V1::Address do
         new_address = subject.addresses.create sample_params
 
         find_result = subject.addresses.find(new_address["id"])
-        find_result["name"].downcase.must_equal(sample_params[:name].downcase)
+        assert /#{find_result["name"]}/i =~ sample_params[:name]
       end
     end
   end
